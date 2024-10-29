@@ -1,5 +1,8 @@
 #!/bin/bash
 #/etc/ocserv/scripts/connect.sh
+##Update in ocserv
+#auth = "plain[passwd=/etc/ocserv/ocpasswd]"
+#connect-script = "/etc/ocserv/scripts/connect.sh"
 # Function to log messages
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') | $1" >> /var/log/ocserv/connection.log
