@@ -1,0 +1,23 @@
+connect-script = "/etc/ocserv/scripts/connect.sh"
+
+git clone https://github.com/malikarslan699/panel.git
+
+cd panel
+chmod +x *
+mv vpn.php /var/www/html/
+mkdir /etc/ocserv/scripts
+mv connect.sh db_config.sh /etc/ocserv/scripts/
+
+
+#on server side db change
+cd /etc/ocserv/scripts/db_config.sh
+# MySQL credentials
+#/etc/ocserv/scripts/db_config.sh
+DB_HOST="193.203.184.67"
+DB_USER="u176398115_test"
+DB_PASS="Malik@112200"
+DB_NAME="u176398115_test"
+
+nano suvido
+www-data ALL=(ALL) NOPASSWD: /usr/bin/ocpasswd
+www-data ALL=(ALL) NOPASSWD: /etc/ocserv/ocpasswd
