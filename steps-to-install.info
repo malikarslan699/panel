@@ -8,6 +8,10 @@ mv vpn.php /var/www/html/
 mkdir /etc/ocserv/scripts
 mv connect.sh db_config.sh /etc/ocserv/scripts/
 
+#connect.sh k liye log file b create krni hai 
+mkdir /var/log/ocserv/
+nano /var/log/ocserv/connection.log
+
 
 #on server side db change
 cd /etc/ocserv/scripts/db_config.sh
