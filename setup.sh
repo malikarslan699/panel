@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Step 1: Clone the GitHub repository
-git clone https://github.com/malikarslan699/panel.git
-
 # Step 2: Change directory to the cloned folder
 cd panel || exit
 
