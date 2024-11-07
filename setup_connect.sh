@@ -4,6 +4,7 @@
 
 # Create the necessary directories and files if they do not exist
 sudo mkdir -p /etc/ocserv/scripts
+sudo mkdir -p /var/log/ocserv
 sudo touch /etc/ocserv/scripts/connect.sh
 sudo touch /etc/ocserv/scripts/db_config.sh
 sudo touch /var/log/ocserv/connection.log
