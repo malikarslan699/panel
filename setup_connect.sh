@@ -1,13 +1,19 @@
 #!/bin/bash
-# Creating files and directories with Setup Permission
 
-mkdir /etc/ocserv/scripts
-touch /etc/ocserv/scripts/connect.sh
-touch /etc/ocserv/scripts/db_config.sh
-touch /var/log/ocserv/connection.log
-chmod +x /etc/ocserv/scripts
-chmod +x /etc/ocserv/scripts/connect.sh
-chmod +x /var/www/html/vpn.php
+# Step 0: Ensure directories and files exist with appropriate permissions
+
+# Create the necessary directories and files if they do not exist
+sudo mkdir -p /etc/ocserv/scripts
+sudo touch /etc/ocserv/scripts/connect.sh
+sudo touch /etc/ocserv/scripts/db_config.sh
+sudo touch /var/log/ocserv/connection.log
+
+# Set permissions
+sudo chmod +x /etc/ocserv/scripts
+sudo chmod +x /etc/ocserv/scripts/connect.sh
+sudo chmod +x /var/www/html/vpn.php
+
+echo "Initial setup of directories, files, and permissions completed."
 
 # Step 1: Input for MySQL credentials
 echo "Enter MySQL Host:"
@@ -250,27 +256,20 @@ EOF
 
 chmod +x /etc/ocserv/scripts/connect.sh
 
-# Done
-echo "vpn.php and connect.sh have been created and set up successfully."
-
 # Step 5: Edit sudoers file for www-data permissions
 SUDO_FILE="/etc/sudoers"
 if ! grep -q "www-data ALL=(ALL) NOPASSWD: /usr/bin/ocpasswd" "$SUDO_FILE"; then
-    echo "www-data ALL=(ALL) NOPASSWD: /usr/bin/ocpasswd" >> "$SUDO_FILE"
+    echo "www-data ALL=(ALL) NOPASSWD: /usr/bin/ocpasswd" | sudo tee -a "$SUDO_FILE"
 fi
 if ! grep -q "www-data ALL=(ALL) NOPASSWD: /etc/ocserv/ocpasswd" "$SUDO_FILE"; then
-    echo "www-data ALL=(ALL) NOPASSWD: /etc/ocserv/ocpasswd" >> "$SUDO_FILE"
+    echo "www-data ALL=(ALL) NOPASSWD: /etc/ocserv/ocpasswd" | sudo tee -a "$SUDO_FILE"
 fi
 
 # Step 6: Check and edit ocserv configuration for connect-script
 OCSERV_CONF="/etc/ocserv/ocserv.conf"
 CONNECT_SCRIPT_LINE='connect-script = "/etc/ocserv/scripts/connect.sh"'
 if ! grep -q "$CONNECT_SCRIPT_LINE" "$OCSERV_CONF"; then
-    echo "$CONNECT_SCRIPT_LINE" >> "$OCSERV_CONF"
+    echo "$CONNECT_SCRIPT_LINE" | sudo tee -a "$OCSERV_CONF"
 fi
-
-chmod +x /etc/ocserv/scripts
-chmod +x /etc/ocserv/scripts/connect.sh
-chmod +x /var/www/html/vpn.php
 
 echo "Setup completed successfully."
