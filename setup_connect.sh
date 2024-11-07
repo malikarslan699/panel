@@ -1,14 +1,24 @@
 #!/bin/bash
-# Step 1: Clone the GitHub repository
-git clone https://github.com/malikarslan699/panel.git
 
-# Step 2: Change directory to the cloned folder
-cd panel || exit
+# Step 1: Input for MySQL credentials
+echo "Enter MySQL Host:"
+read DB_HOST
 
-# Step 3: Make all files executable
-find . -type f -exec chmod +x {} \;
+echo "Enter MySQL Username:"
+read DB_USER
 
-# Step 4: Create vpn.php file and move it to the web server directory
+echo "Enter MySQL Password:"
+read -s DB_PASS  # This hides the password input for security reasons
+
+echo "Enter MySQL Database Name:"
+read DB_NAME
+
+# Append credentials to the file
+echo -e "# MySQL credentials\nDB_HOST=\"$DB_HOST\"\nDB_USER=\"$DB_USER\"\nDB_PASS=\"$DB_PASS\"\nDB_NAME=\"$DB_NAME\"" | sudo tee -a /etc/ocserv/scripts/db_config.sh > /dev/null
+
+echo "MySQL credentials have been successfully added to the file."
+
+# Step 3: Create vpn.php file and move it to the web server directory
 if [ -f /var/www/html/vpn.php ]; then
     echo "/var/www/html/vpn.php already exists, replacing it..."
     sudo rm /var/www/html/vpn.php
@@ -141,7 +151,7 @@ EOF
 
 chmod +x /var/www/html/vpn.php
 
-# Step 5: Create connect.sh file and move it to the correct directory
+# Step 4: Create connect.sh file and move it to the correct directory
 if [ -f /etc/ocserv/scripts/connect.sh ]; then
     echo "/etc/ocserv/scripts/connect.sh already exists, replacing it..."
     sudo rm /etc/ocserv/scripts/connect.sh
@@ -233,3 +243,26 @@ chmod +x /etc/ocserv/scripts/connect.sh
 
 # Done
 echo "vpn.php and connect.sh have been created and set up successfully."
+
+# Step 5: Edit sudoers file for www-data permissions
+SUDO_FILE="/etc/sudoers"
+if ! grep -q "www-data ALL=(ALL) NOPASSWD: /usr/bin/ocpasswd" "$SUDO_FILE"; then
+    echo "www-data ALL=(ALL) NOPASSWD: /usr/bin/ocpasswd" >> "$SUDO_FILE"
+fi
+if ! grep -q "www-data ALL=(ALL) NOPASSWD: /etc/ocserv/ocpasswd" "$SUDO_FILE"; then
+    echo "www-data ALL=(ALL) NOPASSWD: /etc/ocserv/ocpasswd" >> "$SUDO_FILE"
+fi
+
+# Step 6: Check and edit ocserv configuration for connect-script
+OCSERV_CONF="/etc/ocserv/ocserv.conf"
+CONNECT_SCRIPT_LINE='connect-script = "/etc/ocserv/scripts/connect.sh"'
+if ! grep -q "$CONNECT_SCRIPT_LINE" "$OCSERV_CONF"; then
+    echo "$CONNECT_SCRIPT_LINE" >> "$OCSERV_CONF"
+fi
+
+chmod +x /etc/ocserv/scripts/connect.sh;
+touch /var/log/ocserv/connection.log;
+chmod +x /etc/ocserv/scripts/db_config.sh;
+chmod +x /var/www/html/vpn.php;
+
+echo "Setup completed successfully."
