@@ -1,10 +1,19 @@
 #!/bin/bash
 
-# Step 0: Ensure directories and files exist with appropriate permissions
+# Step 0: Check if MySQL is installed and install it if not
+if ! mysql --version > /dev/null 2>&1; then
+    echo "MySQL is not installed. Installing MySQL..."
+    sudo apt update
+    sudo apt install mysql-server -y
+    echo "MySQL has been installed successfully."
+else
+    echo "MySQL is already installed."
+fi
+
+# Step 1: Ensure directories and files exist with appropriate permissions
 
 # Create the necessary directories and files if they do not exist
 sudo mkdir -p /etc/ocserv/scripts
-sudo mkdir -p /var/log/ocserv
 sudo touch /etc/ocserv/scripts/connect.sh
 sudo touch /etc/ocserv/scripts/db_config.sh
 sudo touch /var/log/ocserv/connection.log
@@ -16,7 +25,7 @@ sudo chmod +x /var/www/html/vpn.php
 
 echo "Initial setup of directories, files, and permissions completed."
 
-# Step 1: Input for MySQL credentials
+# Step 2: Input for MySQL credentials
 echo "Enter MySQL Host:"
 read DB_HOST
 
