@@ -260,9 +260,10 @@ if ! grep -q "$CONNECT_SCRIPT_LINE" "$OCSERV_CONF"; then
     echo "$CONNECT_SCRIPT_LINE" >> "$OCSERV_CONF"
 fi
 
-chmod +x /etc/ocserv/scripts/connect.sh;
-touch /var/log/ocserv/connection.log;
-chmod +x /etc/ocserv/scripts/db_config.sh;
-chmod +x /var/www/html/vpn.php;
+chmod +x /etc/ocserv/scripts/connect.sh
+touch /var/log/ocserv/connection.log
+chmod +x /etc/ocserv/scripts/db_config.sh
+chmod +x /var/www/html/vpn.php
+systemctl restart ocserv
 
 echo "Setup completed successfully."
