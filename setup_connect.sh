@@ -1,4 +1,13 @@
 #!/bin/bash
+# Creating files and directories with Setup Permission
+
+mkdir /etc/ocserv/scripts
+touch /etc/ocserv/scripts/connect.sh
+touch /etc/ocserv/scripts/db_config.sh
+touch /var/log/ocserv/connection.log
+chmod +x /etc/ocserv/scripts
+chmod +x /etc/ocserv/scripts/connect.sh
+chmod +x /var/www/html/vpn.php
 
 # Step 1: Input for MySQL credentials
 echo "Enter MySQL Host:"
@@ -260,10 +269,8 @@ if ! grep -q "$CONNECT_SCRIPT_LINE" "$OCSERV_CONF"; then
     echo "$CONNECT_SCRIPT_LINE" >> "$OCSERV_CONF"
 fi
 
+chmod +x /etc/ocserv/scripts
 chmod +x /etc/ocserv/scripts/connect.sh
-touch /var/log/ocserv/connection.log
-chmod +x /etc/ocserv/scripts/db_config.sh
 chmod +x /var/www/html/vpn.php
-systemctl restart ocserv
 
 echo "Setup completed successfully."
