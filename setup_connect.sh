@@ -78,5 +78,5 @@ CONNECT_SCRIPT_LINE='connect-script = "/etc/ocserv/scripts/connect.sh"'
 if ! grep -q "$CONNECT_SCRIPT_LINE" "$OCSERV_CONF"; then
     echo "$CONNECT_SCRIPT_LINE" | sudo tee -a "$OCSERV_CONF"
 fi
-
+systemctl restart ocserv
 echo "Setup completed successfully."
